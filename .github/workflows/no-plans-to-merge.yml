@@ -2,27 +2,26 @@ name: No Plans To Merge
 
 on:
   pull_request:
-    types: [closed]
 
 jobs:
-  no-plans-to-merge:
+  laravel-pint:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == false
-    permissions:
-      pull-requests: write
 
     steps:
-      - name: Output context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - name: Create a comment on the PR
-        uses: actions/github-script@v7
+      - name: Checkout Code
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup PHP and Composer
+        uses: shivammathur/setup-php@2.33.0
         with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'No plans to merge 👍'
-            })
+          php-version: "8.3"
+          tools: composer:v2
+
+      - name: Install laravel pint
+        run: composer global require laravel/pint
+
+      - name: Run laravel pint
+        run: pint --test
+
+      - name: push changes back to the repo
+        run: echo "TODO" 
