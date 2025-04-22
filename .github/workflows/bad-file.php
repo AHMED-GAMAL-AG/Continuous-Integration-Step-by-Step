@@ -1,10 +1,7 @@
-hi 😊
-this is a bad file 😉
-merge my bad file please 🥹
-merge my bad file please 🥹
-merge my bad file please 🥹
-merge my bad file please 🥹
-merge my bad file please 🥹
-merge my bad file please 🥹
-merge my bad file please 🥹
+<?php 
 
+class TestPintClass {
+    public function testPint() { // this should fail on pint
+        $this->assertTrue(true);
+    }
+}
