@@ -2,7 +2,8 @@
 
 class TestPintClass
 {
-    public function testPint() {
+    public function testPint()
+    {
         $this->assertTrue(true);
     }
 }
