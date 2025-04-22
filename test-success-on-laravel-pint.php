@@ -2,7 +2,7 @@
 
 class TestPintClass
 {
-    public function testPint() // this success fail on pint
-    {$this->assertTrue(true);
+    public function testPint() {
+        $this->assertTrue(true);
     }
 }
