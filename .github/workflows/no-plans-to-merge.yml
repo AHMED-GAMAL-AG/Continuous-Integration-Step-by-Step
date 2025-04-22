@@ -1,40 +1,27 @@
-name: No Plans To Merge
+name: No Plans to Merge
 
 on:
-  push:
-    branches:
-      - main
-
-permissions:
-  contents: write
+  pull_request:
+    types:
+      - closed
 
 jobs:
-  laravel-pint:
+  no-plans-to-merge:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == false
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4.2.2
+      - name: Output Context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo $GITHUB_CONTEXT
+      - name: Create a Comment on the PR
+        uses: actions/github-script@v7
         with:
-          ref: ${{ github.head_ref }}
-          token: ${{ secrets.GITHUB_TOKEN }} 
-
-      - name: Setup PHP and Composer
-        uses: shivammathur/setup-php@2.33.0
-        with:
-          php-version: "8.3"
-          tools: composer:v2
-
-      - name: Install laravel pint
-        run: composer global require laravel/pint
-
-      - name: Run laravel pint
-        run: pint
-
-      - name: push changes back to the repo
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "Laravel Pint" || exit 0
-          git push origin HEAD:${{ github.head_ref }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'No plans to merge 👍'
+            })
